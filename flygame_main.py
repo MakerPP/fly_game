@@ -4,6 +4,7 @@ from pygame.sprite import Group
 
 from settings import Settings
 from ship import Ship
+from game_stats import GameStats
 import game_functions as gf
 
 def run_game():
@@ -19,7 +20,9 @@ def run_game():
     aliens = Group()
     """绘制更新一排外星人位置"""
     gf.create_fleet(ai_settings,screen,ship,aliens)
-    
+    """创建一个用于统计存储游戏统计信息的实例""" 
+    stats = GameStats(ai_settings)
+
     while True:
         """获取按键事件"""
         gf.check_events(ai_settings,screen,ship,bullets)
@@ -28,7 +31,7 @@ def run_game():
         """子弹位置更新"""
         gf.update_bullets(ai_settings,screen,ship,aliens,bullets)
         """更新外星人显示"""
-        gf.update_aliens(ai_settings,aliens)
+        gf.update_aliens(ai_settings,stats,screen,ship,aliens,bullets)
         """更新屏幕显示"""
         gf.update_screen(ai_settings,screen,ship,aliens,bullets)
 

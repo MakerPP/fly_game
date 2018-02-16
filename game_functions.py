@@ -113,11 +113,12 @@ def change_fleet_direction(ai_settings,aliens):
     ai_settings.fleet_direction *= -1
 
     """更新外星人参数"""
-def update_aliens(ai_settings,aliens):
+def update_aliens(ai_settings,stats,screen,ship,aliens,bullets):
     check_fleet_edges(ai_settings,aliens)
     """更新外星人显示位置"""
     aliens.update()
-
+    if pygame.sprite.spritecollideany(ship,aliens):
+       print("ship hit!!")
 
 
 
