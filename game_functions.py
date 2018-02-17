@@ -3,6 +3,7 @@ import sys
 import pygame
 from bullet import Bullet
 from alien import Alien
+from time import sleep
 
 def check_key_down_event(event,ai_settings,screen,ship,bullets):
     """按键按下事件处理"""
@@ -112,13 +113,41 @@ def change_fleet_direction(ai_settings,aliens):
         alien.rect.y += ai_settings.fleet_drop_speed
     ai_settings.fleet_direction *= -1
 
+    """飞船被撞击之后"""
+def ship_hit(ai_settings,stats,screen,ship,aliens,bullets):
+    """响应被外星人撞到的飞船"""
+    if stats.ships_left > 0:
+        stats.ships_left -= 1
+    else:
+        stats.game_active = False
+    """清空外星人列表和子弹列表"""
+    aliens.empty()
+    bullets.empty()
+    """创建一群新的外星人，并将飞船放置到屏幕低端中央"""
+    create_fleet(ai_settings,screen,ship,aliens)
+    ship.center_ship()
+    """暂停"""
+    sleep(0.5)
+
+    """检测是否有外星人撞到屏幕低端"""
+def check_aliens_bottom(ai_settings,stats,screen,ship,aliens,bullets):
+    screen_rect = screen.get_rect()
+    for alien in aliens.sprites():
+        if alien.rect.bottom >= screen_rect.bottom:
+            ship_hit(ai_settings,stats,screen,ship,aliens,bullets)
+            break
+
     """更新外星人参数"""
 def update_aliens(ai_settings,stats,screen,ship,aliens,bullets):
     check_fleet_edges(ai_settings,aliens)
     """更新外星人显示位置"""
     aliens.update()
+    """检测是否有外星人撞到屏幕低端"""
+    check_aliens_bottom(ai_settings,stats,screen,ship,aliens,bullets)
+    """检测是否有外星人和飞船发生碰撞"""
     if pygame.sprite.spritecollideany(ship,aliens):
-       print("ship hit!!")
+        ship_hit(ai_settings,stats,screen,ship,aliens,bullets)
+        #print("ship hit!!")
 
 
 

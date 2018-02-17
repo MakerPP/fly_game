@@ -26,12 +26,13 @@ def run_game():
     while True:
         """获取按键事件"""
         gf.check_events(ai_settings,screen,ship,bullets)
-        """飞船位置更新"""
-        ship.update()
-        """子弹位置更新"""
-        gf.update_bullets(ai_settings,screen,ship,aliens,bullets)
-        """更新外星人显示"""
-        gf.update_aliens(ai_settings,stats,screen,ship,aliens,bullets)
+        if stats.game_active:
+            """飞船位置更新"""
+            ship.update()
+            """子弹位置更新"""
+            gf.update_bullets(ai_settings,screen,ship,aliens,bullets)
+            """更新外星人显示"""
+            gf.update_aliens(ai_settings,stats,screen,ship,aliens,bullets)
         """更新屏幕显示"""
         gf.update_screen(ai_settings,screen,ship,aliens,bullets)
 
